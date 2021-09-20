@@ -19,9 +19,20 @@ public class ConsoleHostedService : IHostedService
     {
 
         _logger.LogInformation("Started has been called.");
-
-        //while(!cancellationToken.IsCancellationRequested)
-            _ = DoWork(cancellationToken);
+        Console.WriteLine("ENTER Command: cool for work and quit for exit");
+        string? cmd;
+        
+        while(!cancellationToken.IsCancellationRequested)
+        {
+            Console.Write(">");
+            cmd = Console.ReadLine();
+            if (cmd=="quit") _appLifetime.StopApplication();
+            else if (cmd == "cool")
+            {
+                DoWork(cancellationToken).Wait();
+            }
+        }
+            //_ = DoWork(cancellationToken);
 
 
         return Task.CompletedTask;
@@ -39,7 +50,7 @@ public class ConsoleHostedService : IHostedService
         try
         {
             _logger.LogInformation("Starting DoWork");
-            await Task.Delay(1000, cancellationToken);
+            await Task.Delay(100, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -50,7 +61,7 @@ public class ConsoleHostedService : IHostedService
         {
             // Gracefully exiting
             _logger.LogInformation("Time to stop DoingThings");
-            _appLifetime.StopApplication(); 
+            //_appLifetime.StopApplication(); 
         }
 
 
