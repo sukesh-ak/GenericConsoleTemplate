@@ -13,8 +13,10 @@ class Program
             {
                 services
                     .AddHostedService<LifetimeEventsHostedService>()
-                    //.AddHostedService<TimerHostedService>()
+                    .AddHostedService<TimerHostedService>()
+                    .AddHostedService<CmdBackgroundService>()
                     .AddHostedService<ConsoleHostedService>();
+                
             })
             .ConfigureLogging((hostContext, logging) =>
             {
