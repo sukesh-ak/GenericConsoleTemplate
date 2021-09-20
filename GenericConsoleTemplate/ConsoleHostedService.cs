@@ -17,28 +17,13 @@ public class ConsoleHostedService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        #region App Lifetime Events
-        // Started
-        _appLifetime.ApplicationStarted.Register(async () =>
-            {
-                _logger.LogInformation("Started has been called.");
 
-                await DoSomething();
+        _logger.LogInformation("Started has been called.");
 
-            });
+        //while(!cancellationToken.IsCancellationRequested)
+            _ = DoWork(cancellationToken);
 
-        // Stopping
-        _appLifetime.ApplicationStopping.Register(() =>
-        {
-            _logger.LogInformation("Stopping has been called.");
-        });
 
-        // Stopped
-        _appLifetime.ApplicationStopped.Register(() =>
-        {
-            _logger.LogInformation("Stopped has been called.");
-        });
-        #endregion
         return Task.CompletedTask;
     }
 
@@ -49,12 +34,12 @@ public class ConsoleHostedService : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task DoSomething()
+    private async Task DoWork(CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogInformation("Starting DoSomething");
-            await Task.Delay(1000);
+            _logger.LogInformation("Starting DoWork");
+            await Task.Delay(1000, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -69,8 +54,6 @@ public class ConsoleHostedService : IHostedService
         }
 
 
-        _logger.LogInformation("Ending DoSomething");
-
-
+        _logger.LogInformation("Ending DoWork");
     }
 }

@@ -12,6 +12,8 @@ class Program
             .ConfigureServices((hostContext, services) =>
             {
                 services
+                    .AddHostedService<LifetimeEventsHostedService>()
+                    .AddHostedService<TimerHostedService>()
                     .AddHostedService<ConsoleHostedService>();
             })
             .ConfigureLogging((hostContext, logging) =>
@@ -37,7 +39,6 @@ class Program
 
                     .AddCommandLine(args);
             })
-
             .RunConsoleAsync();
     }
 }
