@@ -19,21 +19,81 @@ public class ConsoleHostedService : IHostedService
     {
 
         _logger.LogInformation("Started has been called.");
-        Console.WriteLine("ENTER Command: cool for work and quit for exit");
-        string? cmd;
+        Console.WriteLine("Welcome to Interactive CLI");
+        string navScope = "ROOT";
+        string breadcrumps = ">";
         
         while(!cancellationToken.IsCancellationRequested)
         {
-            Console.Write(">");
-            cmd = Console.ReadLine();
-            if (cmd=="quit") _appLifetime.StopApplication();
-            else if (cmd == "cool")
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{breadcrumps} ");
+            Console.ResetColor();
+            string? cmd = Console.ReadLine();
+
+            switch (cmd.ToUpperInvariant())
             {
-                DoWork(cancellationToken).Wait();
+                case "QUIT":
+                    _appLifetime.StopApplication();
+                    break;
+                case "NAV1":
+                case "NAV2":
+                    navScope = cmd.ToUpperInvariant();
+                    string camelcase = cmd.ToUpperInvariant().Substring(0, 1) + cmd.ToLowerInvariant().Substring(1);
+                    breadcrumps = $"{camelcase}>";
+                    break;
+                case "EXIT":
+                    navScope = "ROOT";
+                    breadcrumps = ">";
+                    break;
+                case "HELP":
+                    Console.WriteLine("Show help");
+                    break;
+                case "JUNK":
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Console.WriteLine($"Number {i}");
+                    }
+                    break;
+                case "RUN":
+                    Console.Write("Analyzing...");
+                    Console.CursorVisible = false;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (i % 2 == 0)
+                            Console.Write("\\");
+                        else
+                            Console.Write("/");
+                        Console.CursorLeft = Console.CursorLeft - 1;
+                        //Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                        Thread.Sleep(TimeSpan.FromSeconds(1));
+                    }
+                    Console.Write("Done!");
+                    Console.CursorVisible = true;
+                    Console.WriteLine();
+                    break;
+                case "PLUGINS":
+                    /*
+                     * If navScope is ROOT then show all
+                     * If navScope is RECON then show all recon plugins+commands (filter)
+                     */
+                    //Console.WriteLine($"Command: {cmd}");
+                    Console.WriteLine("Plugins available:");
+                    Console.WriteLine(" Ping");
+                    Console.WriteLine(" Tracert");
+                    break;
+                case "DOWORK":
+                    DoWork(cancellationToken).Wait();
+                    break;
+                default:
+                    if (!String.IsNullOrEmpty(cmd))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Invalid command: {cmd}");
+                        Console.ResetColor();
+                    }
+                    break;
             }
         }
-            //_ = DoWork(cancellationToken);
-
 
         return Task.CompletedTask;
     }

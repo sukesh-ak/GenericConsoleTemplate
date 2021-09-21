@@ -13,8 +13,8 @@ class Program
             {
                 services
                     .AddHostedService<LifetimeEventsHostedService>()
-                    .AddHostedService<TimerHostedService>()
-                    .AddHostedService<CmdBackgroundService>()
+                    //.AddHostedService<TimerHostedService>()
+                    //.AddHostedService<CmdBackgroundService>()
                     .AddHostedService<ConsoleHostedService>();
                 
             })
