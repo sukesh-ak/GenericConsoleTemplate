@@ -12,7 +12,7 @@ class Program
             .ConfigureServices((hostContext, services) =>
             {
                 services
-                    .AddHostedService<LifetimeEventsHostedService>()
+                    //.AddHostedService<LifetimeEventsHostedService>()
                     //.AddHostedService<TimerHostedService>()
                     //.AddHostedService<CmdBackgroundService>()
                     .AddHostedService<ConsoleHostedService>();
