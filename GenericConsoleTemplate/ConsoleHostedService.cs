@@ -29,6 +29,7 @@ public class ConsoleHostedService : IHostedService
             Console.Write($"{breadcrumps} ");
             Console.ResetColor();
             string? cmd = Console.ReadLine();
+            ArgumentNullException.ThrowIfNull(cmd); // Short of if null check
 
             switch (cmd.ToUpperInvariant())
             {
@@ -74,7 +75,7 @@ public class ConsoleHostedService : IHostedService
                 case "PLUGINS":
                     /*
                      * If navScope is ROOT then show all
-                     * If navScope is RECON then show all recon plugins+commands (filter)
+                     * If navScope is <scope> then show all scoped plugins+commands (filter)
                      */
                     //Console.WriteLine($"Command: {cmd}");
                     Console.WriteLine("Plugins available:");
